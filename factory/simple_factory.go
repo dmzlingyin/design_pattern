@@ -1,84 +1,73 @@
+/*
+简单工厂组成: 工厂 -> 抽象产品 -> 具体产品
+
+优点：
+1. 实现了对象创建和使用的分离。
+2. 不需要记住具体类名，记住参数即可，减少使用者记忆量。
+
+缺点：
+1. 对工厂类职责过重，一旦不能工作，系统受到影响。
+2. 增加系统中类的个数，复杂度和理解度增加。
+3. 违反“开闭原则”，添加新产品需要修改工厂逻辑，工厂越来越复杂。
+
+适用场景：
+1.  工厂类负责创建的对象比较少，由于创建的对象较少，不会造成工厂方法中的业务逻辑太过复杂。
+2. 客户端只知道传入工厂类的参数，对于如何创建对象并不关心。
+*/
 package main
 
 import "fmt"
 
-type IGun interface {
-	setName(name string)
-	setPower(power int)
-	getName() string
-	getPower() int
+// 抽象层
+type Fruit interface {
+	Show()
 }
 
-type Gun struct {
-	name  string
-	power int
+// 基础类模块
+type Apple struct{}
+
+func (a *Apple) Show() {
+	fmt.Println("apple")
 }
 
-func (g *Gun) setName(name string) {
-	g.name = name
+type Banana struct{}
+
+func (b *Banana) Show() {
+	fmt.Println("banana")
 }
 
-func (g *Gun) setPower(power int) {
-	g.power = power
+type Pear struct{}
+
+func (p *Pear) Show() {
+	fmt.Println("pear")
 }
 
-func (g *Gun) getName() string {
-	return g.name
-}
+// 工厂模块
+type Factory struct{}
 
-func (g *Gun) getPower() int {
-	return g.power
-}
+func (f *Factory) CreateFruit(kind string) Fruit {
+	var fruit Fruit
 
-// 具体产品
-type Ak47 struct {
-	Gun
-}
-
-func newAk47() IGun {
-	return &Ak47{
-		Gun: Gun{
-			name:  "Ak47 gun",
-			power: 4,
-		},
+	if kind == "apple" {
+		fruit = &Apple{}
+	} else if kind == "banana" {
+		fruit = &Banana{}
+	} else if kind == "pear" {
+		fruit = &Pear{}
 	}
+	return fruit
 }
 
-// 具体产品
-type musket struct {
-	Gun
-}
-
-func newMusket() IGun {
-	return &musket{
-		Gun: Gun{
-			name:  "Musket gun",
-			power: 1,
-		},
-	}
-}
-
-// 工厂
-func getGun(gunType string) (IGun, error) {
-	if gunType == "ak47" {
-		return newAk47(), nil
-	}
-	if gunType == "musket" {
-		return newMusket(), nil
-	}
-	return nil, fmt.Errorf("Wrong gun type passed")
-}
-
-// 客户端代码
+// 业务逻辑层
 func main() {
-	ak47, _ := getGun("ak47")
-	musket, _ := getGun("musket")
+	factory := &Factory{}
 
-	printDetails(ak47)
-	printDetails(musket)
-}
+	apple := factory.CreateFruit("apple")
+	apple.Show()
 
-func printDetails(g IGun) {
-	fmt.Printf("Gun: %s\n", g.getName())
-	fmt.Printf("Power: %d\n", g.getPower())
+	banana := factory.CreateFruit("banana")
+	banana.Show()
+
+	pear := factory.CreateFruit("pear")
+	pear.Show()
 }
