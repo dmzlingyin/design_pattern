@@ -1,6 +1,6 @@
 /*
 https://refactoringguru.cn/design-patterns/proxy
-本例演示如何使用代理模式在第三方腾讯视频 （TencentVideo， 代码示例中记为 TV） 程序库中添加延迟初始化和缓存。
+本例演示如何使用代理模式在第三方腾讯视频 （TencentVideo， 代码示例中记为 TV） 程序库中添加缓存。
 */
 package main
 

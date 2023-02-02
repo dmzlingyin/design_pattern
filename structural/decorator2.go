@@ -25,8 +25,17 @@ func NewAnimal(name string) Animal {
 		return &Cat{}
 	} else if name == "dog" {
 		return &Dog{}
+	} else if name == "bird" {
+		return &Bird{}
 	}
 	return nil
+}
+
+// 新增加一个具体的动物类
+type Bird struct{}
+
+func (b *Bird) Eat() {
+	fmt.Println("小鸟在吃饭")
 }
 
 // ===================== 装饰器类 =====================
@@ -52,6 +61,15 @@ func (dd *DogDecorator) Eat() {
 	dd.animal.Eat()
 }
 
+type BirdDecorator struct {
+	Decorator
+}
+
+func (bd *BirdDecorator) Eat() {
+	fmt.Println("吃之前先跳一跳")
+	bd.animal.Eat()
+}
+
 func NewCatDecorator(animal Animal) Animal {
 	return &CatDecorator{
 		Decorator{animal},
@@ -64,11 +82,20 @@ func NewDogDecorator(animal Animal) Animal {
 	}
 }
 
+func NewBirdDecorator(animal Animal) Animal {
+	return &BirdDecorator{
+		Decorator{animal},
+	}
+}
+
+// 业务层代码
 func main() {
 	cat := NewAnimal("cat")
 	dog := NewAnimal("dog")
+	bird := NewAnimal("bird")
 	cat.Eat()
 	dog.Eat()
+	bird.Eat()
 
 	fmt.Println("=============================")
 
@@ -77,4 +104,7 @@ func main() {
 	fmt.Println("-----")
 	dd := NewDogDecorator(dog)
 	dd.Eat()
+	fmt.Println("-----")
+	bd := NewBirdDecorator(bird)
+	bd.Eat()
 }
