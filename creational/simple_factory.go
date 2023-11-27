@@ -24,43 +24,53 @@ type Fruit interface {
 }
 
 // 基础类模块
-type Apple struct{}
+type Apple struct {
+	count int32
+}
 
 func (a *Apple) Show() {
-	fmt.Println("apple")
+	fmt.Println("apple, count: ", a.count)
 }
 
-type Banana struct{}
+type Banana struct {
+	count int32
+}
 
 func (b *Banana) Show() {
-	fmt.Println("banana")
+	fmt.Println("banana, count: ", b.count)
 }
 
-type Pear struct{}
+type Pear struct {
+	count int32
+}
 
 func (p *Pear) Show() {
-	fmt.Println("pear")
+	fmt.Println("pear, count: ", p.count)
 }
 
 // 工厂模块
 type Factory struct{}
 
+func NewFactory() *Factory {
+	return &Factory{}
+}
+
 func (f *Factory) CreateFruit(kind string) Fruit {
 	var fruit Fruit
 
 	if kind == "apple" {
-		fruit = &Apple{}
+		fruit = &Apple{count: 1}
 	} else if kind == "banana" {
-		fruit = &Banana{}
+		fruit = &Banana{count: 2}
 	} else if kind == "pear" {
-		fruit = &Pear{}
+		fruit = &Pear{count: 3}
 	}
 	return fruit
 }
 
 // 业务逻辑层
 func main() {
-	factory := &Factory{}
+	factory := NewFactory()
 
 	apple := factory.CreateFruit("apple")
 	apple.Show()
