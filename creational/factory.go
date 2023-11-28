@@ -20,16 +20,17 @@ package main
 
 import "fmt"
 
-// 抽象层
+// 抽象产品
 type Fruit interface {
 	Show()
 }
 
+// 抽象工厂
 type AbstractFactory interface {
 	CreateFruit() Fruit
 }
 
-// 基础模块
+// 具体产品
 type Apple struct{}
 
 func (a *Apple) Show() {
@@ -42,14 +43,14 @@ func (p *Pear) Show() {
 	fmt.Println("pear")
 }
 
-// 增加新的水果
+// 增加新的产品
 type Banana struct{}
 
 func (b *Banana) Show() {
 	fmt.Println("新增加的banana")
 }
 
-// 工厂模块
+// 具体工厂
 type AppleFactory struct{}
 
 func (a *AppleFactory) CreateFruit() Fruit {
@@ -62,6 +63,7 @@ func (p *PearFatory) CreateFruit() Fruit {
 	return &Pear{}
 }
 
+// 增加新的工厂
 type BananaFactory struct{}
 
 func (b *BananaFactory) CreateFruit() Fruit {
@@ -70,15 +72,11 @@ func (b *BananaFactory) CreateFruit() Fruit {
 
 // 业务逻辑层
 func main() {
-	af := &AppleFactory{}
-	apple := af.CreateFruit()
-	apple.Show()
+	show(&AppleFactory{})
+	show(&PearFatory{})
+	show(&BananaFactory{})
+}
 
-	pf := &PearFatory{}
-	pear := pf.CreateFruit()
-	pear.Show()
-
-	bf := &BananaFactory{}
-	banana := bf.CreateFruit()
-	banana.Show()
+func show(factory AbstractFactory) {
+	factory.CreateFruit().Show()
 }
